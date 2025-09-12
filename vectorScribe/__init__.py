@@ -1,1 +1,1 @@
-from vectorScribe import *
+from vectorScribe.scribe import Scribe
