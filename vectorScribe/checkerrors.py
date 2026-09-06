@@ -17,18 +17,18 @@ def _is_type(var,var_name,types):
         raise TypeError("{} must be one of the following types: {}. Instead, \
                         got: {}".format(var_name,types,var))
 
-def _to_array(var,var_name):
+def _to_array(dat_arr,arr_key):
     """Function for converting an arbitrary nested iterable into a numpy 
     array. Also raises error if a given variable can not be converted to an 
     array"""
-    if isinstance(var,np.ndarray):
-        return var
+    if isinstance(dat_arr,np.ndarray):
+        return dat_arr
     else:
         try:
-            return np.array(var)
+            return np.array(dat_arr)
         except:
             raise TypeError("{} cannot be converted to a numpy array. Instead,\
-                            got: {}".format(var_name,var))
+                            got: {}".format(arr_key,dat_arr))
 
 def _iterable_unique(var,var_name):
     """Raises error if all the elements of ``var`` are not unique."""
@@ -73,17 +73,20 @@ def _iterable_shape(var,var_name,shape):
         raise TypeError("{} must have the following shape: {}. Instead, got: \
                         {}".format(var_name,shape,var))
 
-def _vec_consistency(vec,vec_name,univ_vec):
-    """Raises error if ``vec`` is not consistent with ``univ_vec``"""
-    univ_shape = np.shape(univ_vec)
+def _vec_consistency(dat_vec,vec_key,mat_vec):
+    """Raises error if ``dat_vec`` is not consistent with ``mat_vec``"""
+    nm = len(mat_vec)
+    nd = np.shape(dat_vec)[0]
     
-    # Ensure that vector has proper shape
-    _iterable_shape(vec,vec_name,univ_shape)
+    # Ensure that dat_vector has proper shape
+    if nd!=nm:
+        raise TypeError("Axis 0 of {} must be of size: {}. Instead, got: {}"\
+                        .format(vec_key,nm,nd))
     
     # Convert vector to numpy array
-    vec = _to_array(vec,vec_name)
+    dat_vec = _to_array(dat_vec,vec_key)
     
-    return vec
+    return dat_vec
 
 def _grp_consistency(grp,grp_name,univ_grp):
     """Raises error if ``grp`` is not consistent with a ``univ_grp``"""
